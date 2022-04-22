@@ -34,8 +34,10 @@ int * generateNonOrderedDataset(int quant){
 
     static generatedData data;
 
+    int j = quant;
     for (int i = 0; i < quant; i++){     // fill array
-        data[i] = i;
+        data[i] = j;
+        j++;
 
     }
 
