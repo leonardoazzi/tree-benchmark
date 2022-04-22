@@ -17,14 +17,14 @@ Para rodar com o gcc:
 
 ### 1. Geração de dados
 
-- Estrutura de Dados para um campo numérico inteiro
-- Função: gerar dois conjuntos de dados, com valores únicos: dados ordenados e dados não ordenados.
-- Quantidade de dados: 5.000, 10.000, 100.000, 1.000.000 (?)
+- Estrutura de Dados para um campo numérico inteiro ✅
+- Função: gerar dois conjuntos de dados, com valores únicos: dados ordenados e dados não ordenados. ✅
+- Quantidade de dados: 5.000, 10.000, 100.000, 1.000.000 (?) ✅
 
 ### 2. Operações
 
-- Carregar base de dados
-- Inserir dados na estrutura
+- Carregar base de dados ✅
+- Inserir dados na estrutura ✅
 - Consultar dados
     - Ordenados: primeiro, meio e último; 
     - Aleatório: 10 valores
