@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "abp.h"
 
-pNodoA* InsereArvore(pNodoA *a, tipoinfo ch)
+pNodoA* InsereArvoreABP(pNodoA *a, tipoinfo ch)
 {
      if (a == NULL)
      {
@@ -14,9 +14,9 @@ pNodoA* InsereArvore(pNodoA *a, tipoinfo ch)
      }
      else
           if (ch < a->info)
-              a->esq = InsereArvore(a->esq,ch);
+              a->esq = InsereArvoreABP(a->esq,ch);
           else if (ch > a->info)
-              a->dir = InsereArvore(a->dir,ch);
+              a->dir = InsereArvoreABP(a->dir,ch);
      return a;
 }
 
@@ -110,4 +110,57 @@ pNodoA* consultaABP2(pNodoA *a, tipoinfo chave) {
        else return NULL;
 }
 
+void DesenhaABP(pNodoA *a , int nivel){
+    int x;
 
+    if (a !=NULL){
+        for (x=1; x<=nivel; x++)
+            printf("--");
+
+        printf("%d\n", a->info);
+        if (a->esq != NULL) DesenhaABP(a->esq, (nivel+1));
+        if (a->dir != NULL) DesenhaABP(a->dir, (nivel+1));
+    }
+}
+
+void _deletaABP(pNodoA* arv)
+{
+    if (arv == NULL) return;
+
+    _deletaABP(arv->esq);
+    _deletaABP(arv->dir);
+
+    free(arv);
+}
+
+void deletaABP(pNodoA **arv){
+    _deletaABP(*arv);
+
+    *arv = NULL;
+}
+
+int eBusca(pNodoA *a){
+    int a1;
+    int a2;
+    int a3;
+    int a4;
+
+    if(a == NULL){
+        return 1;
+    } else {
+        if(a->dir == NULL){
+            a1 = 1;
+        } else a1 = a->info < a->dir->info;
+
+        if(a->esq == NULL){
+            a2 = 1;
+        } else a2 = a->info > a->esq->info;
+
+        a3 = eBusca(a->dir);
+
+        a4 = eBusca(a->esq);
+
+        //return ((a->info < a->dir->info) && (a->info > a->esq->info) && eBusca(a->dir) && eBusca(a->esq));
+        return a1 && a2 && a3 && a4;
+    }
+}
