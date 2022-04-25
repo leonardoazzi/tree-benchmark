@@ -230,3 +230,16 @@ void CentralE_AVL(pNodoAVL *a)
           CentralE_AVL(a->dir);
       }
 }
+
+pNodoAVL* consultaAVL(pNodoAVL *a, TipoInfo chave) {
+    while (a!=NULL){
+          if (a->info == chave )
+             return a; //achou entao retorna o ponteiro para o nodo
+          else
+            if (a->info > chave)
+               a = a->esq;
+            else
+               a = a->dir;
+            }
+            return NULL; //se nao achou
+}
