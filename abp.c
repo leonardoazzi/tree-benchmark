@@ -4,20 +4,21 @@
 
 pNodoA* InsereArvoreABP(pNodoA *a, tipoinfo ch)
 {
-     if (a == NULL)
-     {
-         a =  (pNodoA*) malloc(sizeof(pNodoA));
-         a->info = ch;
-         a->esq = NULL;
-         a->dir = NULL;
-         return a;
-     }
-     else
-          if (ch < a->info)
-              a->esq = InsereArvoreABP(a->esq,ch);
-          else if (ch > a->info)
-              a->dir = InsereArvoreABP(a->dir,ch);
-     return a;
+    pNodoA **pp = &a;
+    while(*pp != NULL){
+        if(ch > (*pp)->info){
+            pp = &(*pp)->dir;
+        } else{
+            pp = &(*pp)->esq;
+        }
+    }
+
+    *pp =  (pNodoA*) malloc(sizeof(pNodoA));
+    (*pp)->info = ch;
+    (*pp)->dir = NULL;
+    (*pp)->esq = NULL;
+
+    return a;
 }
 
 void preFixadoE(pNodoA *a)

@@ -11,7 +11,7 @@
 /*
  Quantidade de dados: 5.000, 10.000, 100.000, 1.000.000
 */
-#define QUANTI 250000
+#define QUANTI 1000000
 #define N_CONSULTS 4
 
 int main()
@@ -82,7 +82,7 @@ int main()
    //========================================================================================
 
    printf("\n\n------- CONSULTA ORDENADA -------\n");
-   printf("Primeiro, do meio e último valor");
+   printf("Primeiro, do meio e ultimo valor");
 
    //-------------------------------------------------------------------
    // 1.1 ABP
@@ -169,7 +169,7 @@ int main()
    //========================================================================================
 
    printf("\n\n------- CONSULTA DESORDENADA -------\n");
-   printf("10 valores aleatórios");
+   printf("10 valores aleatorios");
 
    //-------------------------------------------------------------------
    // 2.1 ABP
