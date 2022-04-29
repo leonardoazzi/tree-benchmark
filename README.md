@@ -6,7 +6,7 @@ Compara experimentalmente duas estruturas de dados
 
 Para compilar com o gcc:
 ```
-gcc dataGen.c abp.c -o trab
+gcc dataGen.c abp.c avl.c lse.c -o trab
 ```
 
 
@@ -35,6 +35,42 @@ Para rodar com o gcc:
 * Tempo
 * Número de comparações (if, while, ==, >, <, ...)
 
+
+---
+
+### Casos de Teste
+
+1. CONSULTA ORDENADA
+
+    1.1 ABP
+
+    - Primeiro valor
+
+    - Valor do meio
+
+    - Último valor
+
+    
+    1.2 AVL
+    
+    - Primeiro valor
+
+    - Valor do meio
+
+    - Último valor
+
+  
+
+2. CONSULTA DESORDENADA
+
+    2.1 ABP
+
+    - 10 consultas, valores aleatórios
+        
+    
+    2.2 AVL
+
+    - 10 consultas, valores aleatórios
 
 ---
 

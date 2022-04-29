@@ -2,11 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #include "abp.h"
 #include "avl.h"
 #include "dataGen.h"
+#include "lse.h"
 
-#define QUANTI 50000
+/*
+ Quantidade de dados: 5.000, 10.000, 100.000, 1.000.000
+*/
+#define QUANTI 250000
+#define N_CONSULTS 4
 
 int main()
 {
@@ -16,111 +22,232 @@ int main()
 
    srand(time(NULL));
 
+   /*
+      Função: gerar dois conjuntos de dados, com valores únicos: 
+      dados ordenados e dados não ordenados.
+   */
    ord = generateOrderedDataset(QUANTI);
    nonOrd = generateNonOrderedDataset(QUANTI);
 
+   clock_t begin = clock();
+   clock_t end = clock();
+
+   // Setup benchmark
+   InfoNo tempos;
+   PtNo* listaTempos;
+   listaTempos = cria_lista();
+
+   //========================================================================================
+   // CRIAÇÃO DAS ÁRVORES
+   // ABP e AVL, com dados ordenados e não ordenados
+   //========================================================================================
+   
    pNodoA *ABP1 = NULL;
    pNodoA *ABP2 = NULL;
+   pNodoAVL *AVL1 = NULL;
+   pNodoAVL *AVL2 = NULL;
+
+   int ok;
 
    // Cria uma ABP com os dados ordenados
-   clock_t begin_ABP_ORD_INS = clock();
-
    for(i = 0; i < QUANTI; i++){
       ABP1 = InsereArvoreABP(ABP1, ord[i]);
    }
-   clock_t end_ABP_ORD_INS = clock();
-   double time_ABP_ORD_INS = (double)(end_ABP_ORD_INS - begin_ABP_ORD_INS) / CLOCKS_PER_SEC;
 
    // Cria uma ABP com os dados não ordenados
-   clock_t begin_ABP_NON_INS = clock();
-
    for(i = 0; i < QUANTI; i++){
       ABP2 = InsereArvoreABP(ABP2, nonOrd[i]);
    }
-   clock_t end_ABP_NON_INS = clock();
-   double time_ABP_NON_INS = (double)(end_ABP_NON_INS - begin_ABP_NON_INS) / CLOCKS_PER_SEC;
-
-   pNodoAVL *AVL1 = NULL;
-   pNodoAVL *AVL2 = NULL;
-   int ok;
 
    // Cria uma AVL com os dados ordenados
-   clock_t begin_AVL_ORD_INS = clock();
-
    for(i = 0; i < QUANTI; i++){
       AVL1 = InsereArvoreAVL(AVL1, ord[i], &ok);
    }
-   clock_t end_AVL_ORD_INS = clock();
-   double time_AVL_ORD_INS = (double)(end_AVL_ORD_INS - begin_AVL_ORD_INS) / CLOCKS_PER_SEC;
 
    // Cria uma AVL com os dados não ordenados
-   clock_t begin_AVL_NON_INS = clock();
-
    for(i = 0; i < QUANTI; i++){
       AVL2 = InsereArvoreAVL(AVL2, nonOrd[i], &ok);
    }
-   clock_t end_AVL_NON_INS = clock();
-   double time_AVL_NON_INS = (double)(end_AVL_NON_INS - begin_AVL_NON_INS) / CLOCKS_PER_SEC;
 
-   /*
-   printf("======== Arvore BP Ordenada ========\n\n");
-   CentralE(ABP1);
-   printf("\n\n\n");
+   //========================================================================================
+   // CENÁRIO 1: CONSULTA ORDENADA
+   //    1.1 Caso ABP
+   //       - Primeiro valor
+   //       - Valor do meio
+   //       - Último valor
+   //    1.2 Caso AVL
+   //       - Primeiro valor
+   //       - Valor do meio
+   //       - Último valor
+   //========================================================================================
 
-   printf("\n======== Arvore BP Desordenada ========\n\n");
-   preFixadoD(ABP2);
-   printf("\n\n\n");
+   printf("\n\n------- CONSULTA ORDENADA -------\n");
+   printf("Primeiro, do meio e último valor");
 
-   printf("======== Arvore AVL Ordenada ========\n\n");
-   CentralE_AVL(AVL1);
-   printf("\n\n\n");
-
-   printf("\n======== Arvore AVL Desordenada ========\n\n");
-   CentralE_AVL(AVL2);
-   printf("\n\n\n");
-
-   printf("\nABP1 e busca: %d\n", eBusca(ABP1));
-   printf("\nABP2 e busca: %d\n", eBusca(ABP2));
-   */
-
-   // Consulta ABP Ordenada
-   printf("\nABP Ordenada");
+   //-------------------------------------------------------------------
+   // 1.1 ABP
+   //-------------------------------------------------------------------
+   printf("\n\n-> ABP Ordenada:");
    pNodoA* resulABP;
 
+   // 1.1.a. Primeiro
+   begin = clock();
    resulABP = consultaABP(ABP1, 0);
-   if(resulABP != NULL) printf("\nAchou 0");
+   end = clock();
+   double time_ORD_ABP_1 = (double)(end - begin) / CLOCKS_PER_SEC;
 
+   printf("\nTempo de Insercao: %lf", time_ORD_ABP_1);
+
+   // 1.1.b. Meio
+   begin = clock();
    resulABP = consultaABP(ABP1, ((QUANTI/2)-1));
-   if(resulABP != NULL) printf("\nAchou %d", ((QUANTI/2)-1));
+   end = clock();
+   double time_ORD_ABP_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
+   printf("\nTempo de Insercao: %lf", time_ORD_ABP_2);
+
+   // 1.1.c. Fim
+   begin = clock();
    resulABP = consultaABP(ABP1, (QUANTI-1));
-   if(resulABP != NULL) printf("\nAchou %d", (QUANTI-1));
+   end = clock();
+   double time_ORD_ABP_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
+   printf("\nTempo de Insercao: %lf", time_ORD_ABP_3);
 
-   printf("\nTempo de Insercao: %lf", time_ABP_ORD_INS);
+   double time_ORD_ABP_MED = (time_ORD_ABP_1 + time_ORD_ABP_2 + time_ORD_ABP_3) / 3;
+   
+   // SALVA OS DADOS DO TESTE
+   tempos.valor = time_ORD_ABP_MED;
+   strcpy(tempos.arv, "ABP");
+   strcpy(tempos.ord, "ORD");
 
-   // Consulta AVL Ordenada
-   printf("\n\nAVL Ordenada");
-   if((consultaAVL(AVL1, 0)) != NULL) printf("\nAchou 0");
-   if(consultaAVL(AVL1, ((QUANTI/2)-1)) != NULL) printf("\nAchou %d", ((QUANTI/2)-1));
-   if(consultaAVL(AVL1, (QUANTI-1))!= NULL) printf("\nAchou %d", (QUANTI-1));
-   printf("\nTempo de Insercao: %lf", time_AVL_ORD_INS);
+   listaTempos = insere_ord(listaTempos, tempos);
 
-   // Consulta ABP Desordenada
-   printf("\n\nABP Desordenada");
+   //-------------------------------------------------------------------
+   // 1.2 AVL
+   //-------------------------------------------------------------------
+   printf("\n\n-> AVL Ordenada:");
+
+   // 1.2.a. Primeiro
+   begin = clock();
+   consultaAVL(AVL1, 0);
+   end = clock();
+   double time_ORD_AVL_1 = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", time_ORD_AVL_1);
+   
+   // 1.2.b. Meio  
+   begin = clock();
+   consultaAVL(AVL1, ((QUANTI/2)-1));
+   end = clock();
+   double time_ORD_AVL_2 = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", time_ORD_AVL_2);
+
+   // 1.2.c. Fim
+   begin = clock();
+   consultaAVL(AVL1, (QUANTI-1));
+   end = clock();
+   double time_ORD_AVL_3 = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", time_ORD_AVL_3);
+
+   double time_ORD_AVL_MED = (time_ORD_AVL_1 + time_ORD_AVL_2 + time_ORD_AVL_3) / 3.0;
+   
+   // SALVA OS DADOS DO TESTE
+   tempos.valor = time_ORD_AVL_MED;
+   strcpy(tempos.arv, "AVL");
+   strcpy(tempos.ord, "ORD");
+   listaTempos = insere_ord(listaTempos, tempos);
+
+   //========================================================================================
+   // CENÁRIO 2: CONSULTA DESORDENADA
+   //    2.1 Caso ABP
+   //       - 10 valores aleatórios
+   //    2.2 Caso AVL
+   //       - 10 valores aleatórios
+   //========================================================================================
+
+   printf("\n\n------- CONSULTA DESORDENADA -------\n");
+   printf("10 valores aleatórios");
+
+   //-------------------------------------------------------------------
+   // 2.1 ABP
+   //-------------------------------------------------------------------
+   printf("\n\n-> ABP Desordenada:");
+
+   double time_NORD_ABP[10] = {};
+   double time_NORD_ABP_sum = 0;
+
+   // 2.1.a. Consulta 10 valores aleatórios
    for(i=0; i<10; i++){
-      int r = (rand() % QUANTI) + QUANTI;
-      if((consultaABP2(ABP2, r)) != NULL) printf("\nAchou %d", r);
-   }
-   printf("\nTempo de Insercao: %lf", time_ABP_NON_INS);
 
-   // Consulta AVL Desordenada
-   printf("\n\nAVL Desordenada");
-   for(i=0; i<10; i++){
       int r = (rand() % QUANTI) + QUANTI;
-      if((consultaAVL(AVL2, r)) != NULL) printf("\nAchou %d", r);
+      
+      begin = clock();
+      consultaABP2(ABP2, r);
+      end = clock();
+      time_NORD_ABP[i] = (double)(end - begin) / CLOCKS_PER_SEC;
+      printf("\nTempo de Insercao: %lf", time_NORD_ABP[i]);
+
+      time_NORD_ABP_sum = time_NORD_ABP[i] + time_NORD_ABP_sum;
+      
    }
-   printf("\nTempo de Insercao: %lf", time_AVL_NON_INS);
+
+   double time_NORD_ABP_med = time_NORD_ABP_sum / 10;
+
+   // SALVA OS DADOS
+   tempos.valor = time_NORD_ABP_med;
+   strcpy(tempos.arv, "ABP");
+   strcpy(tempos.ord, "NORD");
+
+   listaTempos = insere_ord(listaTempos, tempos);
+
+   //-------------------------------------------------------------------
+   // 2.2 AVL
+   //-------------------------------------------------------------------
+   printf("\n\n-> AVL Desordenada:");
+
+   double time_NORD_AVL[10] = {};
+   double time_NORD_AVL_sum = 0;
+
+   // 2.2.a. Consulta 10 valores aleatórios
+   for(i=0; i<10; i++){
+
+      int r = (rand() % QUANTI) + QUANTI;
+
+      begin = clock();
+      consultaAVL(AVL2, r);
+
+      end = clock();
+      time_NORD_AVL[i] = (double)(end - begin) / CLOCKS_PER_SEC;
+      printf("\nTempo de Insercao: %lf", time_NORD_AVL[i]);
+
+      time_NORD_ABP_sum = time_NORD_ABP[i] + time_NORD_ABP_sum;
+   }
+
+   double time_NORD_AVL_med = time_NORD_AVL_sum / 10;
+
+   // SALVA OS DADOS
+   tempos.valor = time_NORD_AVL_med;
+   strcpy(tempos.arv, "AVL");
+   strcpy(tempos.ord, "NORD");
+
+   listaTempos = insere_ord(listaTempos, tempos);
+
+   //========================================================================================
+   // BENCHMARK
+   // Tempos para cada cenário dos casos de teste
+   //========================================================================================
+   printf("\n\n------- BENCHMARKING -------\n\n");
+
+   printf("\nExibindo a lista...\n");
+   imprime(listaTempos);
+
+   //========================================================================================
+   // DELETA ÁRVORES
+   // Fim
+   //========================================================================================
 
    deletaABP(&ABP1);
    deletaABP(&ABP2);
