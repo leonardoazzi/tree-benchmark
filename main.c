@@ -11,10 +11,14 @@
 /*
  Quantidade de dados: 5.000, 10.000, 100.000, 1.000.000
 */
-#define QUANTI 1000000
+#define QUANT_A 5000
+#define QUANT_B 10000
+#define QUANT_C 100000
+#define QUANT_D 1000000
+
 #define N_CONSULTS 4
 
-int main()
+void benchmark(int quant)
 {
    int *ord;
    int *nonOrd;
@@ -26,16 +30,8 @@ int main()
       Função: gerar dois conjuntos de dados, com valores únicos: 
       dados ordenados e dados não ordenados.
    */
-   ord = generateOrderedDataset(QUANTI);
-   nonOrd = generateNonOrderedDataset(QUANTI);
-
-   clock_t begin = clock();
-   clock_t end = clock();
-
-   // Setup benchmark
-   InfoNo tempos;
-   PtNo* listaTempos;
-   listaTempos = cria_lista();
+   ord = generateOrderedDataset(quant);
+   nonOrd = generateNonOrderedDataset(quant);
 
    //========================================================================================
    // CRIAÇÃO DAS ÁRVORES
@@ -50,24 +46,32 @@ int main()
    int ok;
 
    // Cria uma ABP com os dados ordenados
-   for(i = 0; i < QUANTI; i++){
+   for(i = 0; i < quant; i++){
       ABP1 = InsereArvoreABP(ABP1, ord[i]);
    }
 
    // Cria uma ABP com os dados não ordenados
-   for(i = 0; i < QUANTI; i++){
+   for(i = 0; i < quant; i++){
       ABP2 = InsereArvoreABP(ABP2, nonOrd[i]);
    }
 
    // Cria uma AVL com os dados ordenados
-   for(i = 0; i < QUANTI; i++){
+   for(i = 0; i < quant; i++){
       AVL1 = InsereArvoreAVL(AVL1, ord[i], &ok);
    }
 
    // Cria uma AVL com os dados não ordenados
-   for(i = 0; i < QUANTI; i++){
+   for(i = 0; i < quant; i++){
       AVL2 = InsereArvoreAVL(AVL2, nonOrd[i], &ok);
    }
+
+   clock_t begin = clock();
+   clock_t end = clock();
+
+   // Setup benchmark
+   InfoNo tempos;
+   PtNo* listaTempos;
+   listaTempos = cria_lista();
 
    //========================================================================================
    // CENÁRIO 1: CONSULTA ORDENADA
@@ -100,7 +104,7 @@ int main()
 
    // 1.1.b. Meio
    begin = clock();
-   resulABP = consultaABP(ABP1, ((QUANTI/2)-1));
+   resulABP = consultaABP(ABP1, ((quant/2)-1));
    end = clock();
    double time_ORD_ABP_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -108,7 +112,7 @@ int main()
 
    // 1.1.c. Fim
    begin = clock();
-   resulABP = consultaABP(ABP1, (QUANTI-1));
+   resulABP = consultaABP(ABP1, (quant-1));
    end = clock();
    double time_ORD_ABP_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -138,7 +142,7 @@ int main()
    
    // 1.2.b. Meio  
    begin = clock();
-   consultaAVL(AVL1, ((QUANTI/2)-1));
+   consultaAVL(AVL1, ((quant/2)-1));
    end = clock();
    double time_ORD_AVL_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -146,7 +150,7 @@ int main()
 
    // 1.2.c. Fim
    begin = clock();
-   consultaAVL(AVL1, (QUANTI-1));
+   consultaAVL(AVL1, (quant-1));
    end = clock();
    double time_ORD_AVL_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
@@ -182,7 +186,7 @@ int main()
    // 2.1.a. Consulta 10 valores aleatórios
    for(i=0; i<10; i++){
 
-      int r = (rand() % QUANTI) + QUANTI;
+      int r = (rand() % quant) + quant;
       
       begin = clock();
       consultaABP2(ABP2, r);
@@ -214,7 +218,7 @@ int main()
    // 2.2.a. Consulta 10 valores aleatórios
    for(i=0; i<10; i++){
 
-      int r = (rand() % QUANTI) + QUANTI;
+      int r = (rand() % quant) + quant;
 
       begin = clock();
       consultaAVL(AVL2, r);
@@ -240,6 +244,7 @@ int main()
    // Tempos para cada cenário dos casos de teste
    //========================================================================================
    printf("\n\n------- BENCHMARKING -------\n\n");
+   printf("Cenário: %d dados\n", quant);
 
    printf("\nExibindo a lista...\n");
    imprime(listaTempos);
@@ -248,13 +253,51 @@ int main()
    // DELETA ÁRVORES
    // Fim
    //========================================================================================
-
    deletaABP(&ABP1);
    deletaABP(&ABP2);
    deletaAVL(&AVL1);
    deletaAVL(&AVL2);
 
-   return 0;
 }
 
+
+int main()
+{
+
+   printf("=========================================\n");
+   printf(" ABP/AVL BENCHMARK\n");
+   printf(" Breno Morais e Leonardo A. Martins\n");
+   printf("=========================================\n");
+   printf("\n\n");
+
+   // Cenário a: 5000 dados
+   printf("\n\n-----------------------------------------\n");
+   printf("CENÁRIO A: 5.000 dados\n");
+   printf("-----------------------------------------\n");
+
+   benchmark(QUANT_A);
+
+   // Cenário b: 10.000 dados
+   printf("\n\n-----------------------------------------\n");
+   printf("CENÁRIO B: 10.000 dados\n");
+   printf("-----------------------------------------\n");
+
+   benchmark(QUANT_B);
+
+   // Cenário c: 100.000 dados
+   printf("\n\n-----------------------------------------\n");
+   printf("CENÁRIO C: 100.000 dados\n");
+   printf("-----------------------------------------\n");
+
+   benchmark(QUANT_C);
+
+   // Cenário d: 1.000.000 de dados
+   printf("\n\n-----------------------------------------\n");
+   printf("CENÁRIO D: 1.000.000 dados\n");
+   printf("-----------------------------------------\n");
+
+   benchmark(QUANT_D);
+
+   return 0;
+}
 
