@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
+// #include <conio.h>
 #include <string.h>
 #include "avl.h"
 
@@ -231,15 +231,24 @@ void CentralE_AVL(pNodoAVL *a)
       }
 }
 
-pNodoAVL* consultaAVL(pNodoAVL *a, TipoInfo chave) {
+int consultaAVL(pNodoAVL *a, TipoInfo chave) {
+   int comp = 0;
     while (a!=NULL){
-          if (a->info == chave )
-             return a; //achou entao retorna o ponteiro para o nodo
-          else
-            if (a->info > chave)
+         comp++;
+         if (a->info == chave ){
+            comp++;
+            return comp; //achou
+         }else{
+            comp++;
+            if (a->info > chave){
+               comp++;
                a = a->esq;
-            else
+
+            }else{
+               comp++;
                a = a->dir;
             }
-            return NULL; //se nao achou
+
+          }
+      }
 }

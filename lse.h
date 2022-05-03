@@ -2,7 +2,8 @@ typedef struct TipoInfoNo InfoNo;
 typedef struct TipoPtNo PtNo;
 
 struct TipoInfoNo{
-       double valor;
+       double tempo;
+       int compara;
        char arv[40];
        char ord[40];
        };

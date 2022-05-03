@@ -28,7 +28,7 @@ void sortedInsert(PtNo* ptLista, PtNo* novo)
 {
 
  
-    while (ptLista->prox != NULL &&  (ptLista->info.valor < novo->info.valor) ) {
+    while (ptLista->prox != NULL &&  (ptLista->info.tempo < novo->info.tempo) ) {
         ptLista = ptLista->prox;
     }
  
@@ -74,7 +74,7 @@ PtNo* classifica_lista(PtNo* ptLista){
     PtNo* ptaux;
 
     for (ptaux=ptLista; ptaux!=NULL; ptaux=ptaux->prox){
-        if (ptaux->info.valor > ptaux->prox->info.valor){
+        if (ptaux->info.tempo > ptaux->prox->info.tempo){
 
         }
 
@@ -86,9 +86,9 @@ void imprime(PtNo* l)
 {
     PtNo* ptaux;
 
-    printf("\nArvore \t Ordem \t Tempo");
+    printf("\nArvore \t Ordem \t Tempo \t\t Compara");
     for (ptaux=l; ptaux!=NULL; ptaux=ptaux->prox){
-        printf("\n%s \t %s \t %lf\n",ptaux->info.arv, ptaux->info.ord, ptaux->info.valor);
+        printf("\n%s \t %s \t %lf \t %d\n",ptaux->info.arv, ptaux->info.ord, ptaux->info.tempo, ptaux->info.compara);
 
     }
 

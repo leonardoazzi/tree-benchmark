@@ -23,4 +23,4 @@ pNodoAVL * Caso2 (pNodoAVL * a , int *ok);
 pNodoAVL * InsereArvoreAVL (pNodoAVL * a, TipoInfo x, int *ok);
 void deletaAVL(pNodoAVL **arv);
 void CentralE_AVL(pNodoAVL *a);
-pNodoAVL* consultaAVL(pNodoAVL *a, TipoInfo chave);
+int consultaAVL(pNodoAVL *a, TipoInfo chave);

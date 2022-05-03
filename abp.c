@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "abp.h"
+#include "lse.h"
 
 pNodoA* InsereArvoreABP(pNodoA *a, tipoinfo ch)
 {
@@ -82,33 +83,29 @@ void CentralD(pNodoA *a)
 }
 
 
-pNodoA* consultaABP(pNodoA *a, tipoinfo chave) {
+int consultaABP(pNodoA *a, tipoinfo chave) {
 
+    int comp = 0;
     while (a!=NULL){
-          if (a->info == chave )
-             return a; //achou entao retorna o ponteiro para o nodo
-          else
-            if (a->info > chave)
-               a = a->esq;
-            else
-               a = a->dir;
+        comp++;
+        if(a->info == chave ){
+            comp++;
+            return comp; //achou entao retorna
+        
+        }else{
+
+            if(a->info > chave){
+                comp++;
+                a = a->esq;
+            }else{
+                comp++;
+                a = a->dir;
             }
-            return NULL; //se nao achou
-}
+            
+        } 
+    }
 
-pNodoA* consultaABP2(pNodoA *a, tipoinfo chave) {
-    if (a!=NULL) {
-       if (a->info == chave)
-         return a;
-       else
-           if (a->info > chave)
-                return consultaABP2(a->esq,chave);
-            if (a->info < chave)
-                return consultaABP2(a->dir,chave);
-
-            else return a;
-       }
-       else return NULL;
+    return comp;
 }
 
 void DesenhaABP(pNodoA *a , int nivel){

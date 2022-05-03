@@ -69,7 +69,7 @@ void benchmark(int quant)
    clock_t end = clock();
 
    // Setup benchmark
-   InfoNo tempos;
+   InfoNo bench;
    PtNo* listaTempos;
    listaTempos = cria_lista();
 
@@ -95,37 +95,45 @@ void benchmark(int quant)
    pNodoA* resulABP;
 
    // 1.1.a. Primeiro
+   int comp_ORD_ABP_1 = 0;
    begin = clock();
-   resulABP = consultaABP(ABP1, 0);
+   comp_ORD_ABP_1 = consultaABP(ABP1, 0);
    end = clock();
    double time_ORD_ABP_1 = (double)(end - begin) / CLOCKS_PER_SEC;
 
    printf("\nTempo de Insercao: %lf", time_ORD_ABP_1);
+   printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_1);
 
    // 1.1.b. Meio
+   int comp_ORD_ABP_2 = 0;
    begin = clock();
-   resulABP = consultaABP(ABP1, ((quant/2)-1));
+   comp_ORD_ABP_2 = consultaABP(ABP1, ((quant/2)-1));
    end = clock();
    double time_ORD_ABP_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
    printf("\nTempo de Insercao: %lf", time_ORD_ABP_2);
+   printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_2);
 
    // 1.1.c. Fim
+   int comp_ORD_ABP_3 = 0;
    begin = clock();
-   resulABP = consultaABP(ABP1, (quant-1));
+   comp_ORD_ABP_3 = consultaABP(ABP1, (quant-1));
    end = clock();
    double time_ORD_ABP_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
    printf("\nTempo de Insercao: %lf", time_ORD_ABP_3);
+   printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_3);
 
    double time_ORD_ABP_MED = (time_ORD_ABP_1 + time_ORD_ABP_2 + time_ORD_ABP_3) / 3;
+   int comp_ORD_ABP_MED = (comp_ORD_ABP_1 + comp_ORD_ABP_2 + comp_ORD_ABP_3) / 3;
    
    // SALVA OS DADOS DO TESTE
-   tempos.valor = time_ORD_ABP_MED;
-   strcpy(tempos.arv, "ABP");
-   strcpy(tempos.ord, "ORD");
+   bench.tempo = time_ORD_ABP_MED;
+   bench.compara = comp_ORD_ABP_MED;
+   strcpy(bench.arv, "ABP");
+   strcpy(bench.ord, "ORD");
 
-   listaTempos = insere_ord(listaTempos, tempos);
+   listaTempos = insere_ord(listaTempos, bench);
 
    //-------------------------------------------------------------------
    // 1.2 AVL
@@ -133,36 +141,44 @@ void benchmark(int quant)
    printf("\n\n-> AVL Ordenada:");
 
    // 1.2.a. Primeiro
+   int comp_ORD_AVL_1 = 0;
    begin = clock();
-   consultaAVL(AVL1, 0);
+   comp_ORD_AVL_1 = consultaAVL(AVL1, 0);
    end = clock();
    double time_ORD_AVL_1 = (double)(end - begin) / CLOCKS_PER_SEC;
 
    printf("\nTempo de Insercao: %lf", time_ORD_AVL_1);
+   printf("\nNumero de Comparacoes: %d", comp_ORD_AVL_1);
    
-   // 1.2.b. Meio  
+   // 1.2.b. Meio
+   int comp_ORD_AVL_2 = 0;
    begin = clock();
-   consultaAVL(AVL1, ((quant/2)-1));
+   comp_ORD_AVL_2 = consultaAVL(AVL1, ((quant/2)-1));
    end = clock();
    double time_ORD_AVL_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
    printf("\nTempo de Insercao: %lf", time_ORD_AVL_2);
+   printf("\nNumero de Comparacoes: %d", comp_ORD_AVL_2);
 
    // 1.2.c. Fim
+   int comp_ORD_AVL_3 = 0;
    begin = clock();
-   consultaAVL(AVL1, (quant-1));
+   comp_ORD_AVL_3 = consultaAVL(AVL1, (quant-1));
    end = clock();
    double time_ORD_AVL_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
    printf("\nTempo de Insercao: %lf", time_ORD_AVL_3);
+   printf("\nNumero de Comparacoes: %d", comp_ORD_AVL_3);
 
    double time_ORD_AVL_MED = (time_ORD_AVL_1 + time_ORD_AVL_2 + time_ORD_AVL_3) / 3.0;
+   int comp_ORD_AVL_MED = (comp_ORD_AVL_1 + comp_ORD_AVL_2 + comp_ORD_AVL_3) / 3;
    
    // SALVA OS DADOS DO TESTE
-   tempos.valor = time_ORD_AVL_MED;
-   strcpy(tempos.arv, "AVL");
-   strcpy(tempos.ord, "ORD");
-   listaTempos = insere_ord(listaTempos, tempos);
+   bench.tempo = time_ORD_AVL_MED;
+   bench.compara = comp_ORD_AVL_MED;
+   strcpy(bench.arv, "AVL");
+   strcpy(bench.ord, "ORD");
+   listaTempos = insere_ord(listaTempos, bench);
 
    //========================================================================================
    // CENÁRIO 2: CONSULTA DESORDENADA
@@ -183,29 +199,36 @@ void benchmark(int quant)
    double time_NORD_ABP[10] = {};
    double time_NORD_ABP_sum = 0;
 
+   int comp_NORD_ABP[10] = {};
+   int comp_NORD_ABP_sum = 0;
+
    // 2.1.a. Consulta 10 valores aleatórios
    for(i=0; i<10; i++){
 
       int r = (rand() % quant) + quant;
       
       begin = clock();
-      consultaABP2(ABP2, r);
+      comp_NORD_ABP[i] = consultaABP(ABP2, r);
       end = clock();
       time_NORD_ABP[i] = (double)(end - begin) / CLOCKS_PER_SEC;
       printf("\nTempo de Insercao: %lf", time_NORD_ABP[i]);
+      printf("\nNumero de Comparacoes: %d", comp_NORD_ABP[i]);
 
       time_NORD_ABP_sum = time_NORD_ABP[i] + time_NORD_ABP_sum;
+      comp_NORD_ABP_sum = comp_NORD_ABP[i] + comp_NORD_ABP_sum;
       
    }
 
    double time_NORD_ABP_med = time_NORD_ABP_sum / 10;
+   int comp_NORD_ABP_med = comp_NORD_ABP_sum / 10;
 
    // SALVA OS DADOS
-   tempos.valor = time_NORD_ABP_med;
-   strcpy(tempos.arv, "ABP");
-   strcpy(tempos.ord, "NORD");
+   bench.tempo = time_NORD_ABP_med;
+   bench.compara = comp_NORD_ABP_med;
+   strcpy(bench.arv, "ABP");
+   strcpy(bench.ord, "NORD");
 
-   listaTempos = insere_ord(listaTempos, tempos);
+   listaTempos = insere_ord(listaTempos, bench);
 
    //-------------------------------------------------------------------
    // 2.2 AVL
@@ -215,29 +238,35 @@ void benchmark(int quant)
    double time_NORD_AVL[10] = {};
    double time_NORD_AVL_sum = 0;
 
+   int comp_NORD_AVL[10] = {};
+   int comp_NORD_AVL_sum = 0;
+
    // 2.2.a. Consulta 10 valores aleatórios
    for(i=0; i<10; i++){
 
       int r = (rand() % quant) + quant;
 
       begin = clock();
-      consultaAVL(AVL2, r);
-
+      comp_NORD_AVL[i] = consultaAVL(AVL2, r);
       end = clock();
       time_NORD_AVL[i] = (double)(end - begin) / CLOCKS_PER_SEC;
       printf("\nTempo de Insercao: %lf", time_NORD_AVL[i]);
+      printf("\nNumero de Comparacoes: %d", comp_NORD_AVL[i]);
 
-      time_NORD_ABP_sum = time_NORD_ABP[i] + time_NORD_ABP_sum;
+      time_NORD_AVL_sum = time_NORD_AVL[i] + time_NORD_AVL_sum;
+      comp_NORD_AVL_sum = comp_NORD_AVL[i] + comp_NORD_AVL_sum;
    }
 
    double time_NORD_AVL_med = time_NORD_AVL_sum / 10;
+   int comp_NORD_AVL_med = comp_NORD_AVL_sum / 10;
 
    // SALVA OS DADOS
-   tempos.valor = time_NORD_AVL_med;
-   strcpy(tempos.arv, "AVL");
-   strcpy(tempos.ord, "NORD");
+   bench.tempo = time_NORD_AVL_med;
+   bench.compara = comp_NORD_AVL_med;
+   strcpy(bench.arv, "AVL");
+   strcpy(bench.ord, "NORD");
 
-   listaTempos = insere_ord(listaTempos, tempos);
+   listaTempos = insere_ord(listaTempos, bench);
 
    //========================================================================================
    // BENCHMARK

@@ -6,7 +6,7 @@ Compara experimentalmente duas estruturas de dados
 
 Para compilar com o gcc:
 ```
-gcc dataGen.c abp.c avl.c lse.c -o trab
+gcc dataGen.c abp.c avl.c lse.c main.c -o trab
 ```
 
 
@@ -25,14 +25,14 @@ Para rodar com o gcc:
 
 - Carregar base de dados ✅
 - Inserir dados na estrutura ✅
-- Consultar dados
-    - Ordenados: primeiro, meio e último; 
-    - Aleatório: 10 valores
-        - Média de tempo de cada consulta
-        - Média de tempo das 10 consultas
+- Consultar dados ✅
+    - Ordenados: primeiro, meio e último; ✅
+    - Aleatório: 10 valores ✅
+        - Média de tempo de cada consulta ✅
+        - Média de tempo das 10 consultas ✅
 
 ### Critérios de Comparação
-* Tempo
+* Tempo ✅
 * Número de comparações (if, while, ==, >, <, ...)
 
 
@@ -40,13 +40,13 @@ Para rodar com o gcc:
 
 ### Cenários
 
-    a. 5.000 dados
+    a. 5.000 dados ✅
 
-    b. 10.000 dados
+    b. 10.000 dados ✅
 
-    c. 100.000 dados
+    c. 100.000 dados ✅
 
-    d. 1.000.000 dados
+    d. 1.000.000 dados ✅
 
 ### Casos de Teste
 
