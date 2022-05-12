@@ -352,10 +352,10 @@ void benchmark(int quant)
    printf("\n\n------- BENCHMARKING -------\n\n");
    printf("Cenário: %d dados\n", quant);
 
-   // printf("\n\n--------------------------------\n");
-   // printf("Resultados do Insere\n");
-   // printf("--------------------------------\n");
-   // imprime(listaInsere);
+   printf("\n\n--------------------------------\n");
+   printf("Resultados do Insere\n");
+   printf("--------------------------------\n");
+   imprime(listaInsere);
 
    printf("\n\n--------------------------------\n");
    printf("Resultados de Consulta\n");
