@@ -32,38 +32,11 @@ void benchmark(int quant)
    */
    ord = generateOrderedDataset(quant);
    nonOrd = generateNonOrderedDataset(quant);
-
-   //========================================================================================
-   // CRIAÇÃO DAS ÁRVORES
-   // ABP e AVL, com dados ordenados e não ordenados
-   //========================================================================================
    
    pNodoA *ABP1 = NULL;
    pNodoA *ABP2 = NULL;
    pNodoAVL *AVL1 = NULL;
    pNodoAVL *AVL2 = NULL;
-
-   int ok;
-
-   // Cria uma ABP com os dados ordenados
-   for(i = 0; i < quant; i++){
-      ABP1 = InsereArvoreABP(ABP1, ord[i]);
-   }
-
-   // Cria uma ABP com os dados não ordenados
-   for(i = 0; i < quant; i++){
-      ABP2 = InsereArvoreABP(ABP2, nonOrd[i]);
-   }
-
-   // Cria uma AVL com os dados ordenados
-   for(i = 0; i < quant; i++){
-      AVL1 = InsereArvoreAVL(AVL1, ord[i], &ok);
-   }
-
-   // Cria uma AVL com os dados não ordenados
-   for(i = 0; i < quant; i++){
-      AVL2 = InsereArvoreAVL(AVL2, nonOrd[i], &ok);
-   }
 
    clock_t begin = clock();
    clock_t end = clock();
@@ -71,7 +44,111 @@ void benchmark(int quant)
    // Setup benchmark
    InfoNo bench;
    PtNo* listaTempos;
+   PtNo* listaInsere;
+   listaInsere = cria_lista();
    listaTempos = cria_lista();
+
+   int ok;
+
+   //========================================================================================
+   // INSERE ABP ORDENADA
+   // Cria uma ABP com os dados ordenados
+   //========================================================================================
+   
+   int insere_ORD_ABP = 0;
+   begin = clock();
+
+   // Insere
+   for(i = 0; i < quant; i++){
+      ABP1 = InsereArvoreABP(ABP1, ord[i]);
+   }
+
+   end = clock();
+   double tempo_insere_ORD_ABP = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", tempo_insere_ORD_ABP);
+   //printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_3);
+   
+   // SALVA OS DADOS DO TESTE
+   bench.tempo = tempo_insere_ORD_ABP;
+   bench.compara = 0.000;
+   strcpy(bench.arv, "ABP");
+   strcpy(bench.ord, "ORD");
+
+   listaInsere = insere_ord(listaInsere, bench);
+   
+   //========================================================================================
+   // INSERE ABP NÃO ORDENADA
+   // Cria uma ABP com os dados não ordenados
+   //========================================================================================
+   int insere_NORD_ABP = 0;
+   begin = clock();
+
+   for(i = 0; i < quant; i++){
+      ABP2 = InsereArvoreABP(ABP2, nonOrd[i]);
+   }
+
+   end = clock();
+   double tempo_insere_NORD_ABP = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", tempo_insere_NORD_ABP);
+   //printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_3);
+   
+   // SALVA OS DADOS DO TESTE
+   bench.tempo = tempo_insere_NORD_ABP;
+   strcpy(bench.arv, "ABP");
+   strcpy(bench.ord, "NORD");
+
+   listaInsere = insere_ord(listaInsere, bench);
+
+   //========================================================================================
+   // INSERE AVL NÃO ORDENADA
+   // Cria uma AVL com os dados ordenados
+   //========================================================================================
+   int insere_ORD_AVL = 0;
+   begin = clock();
+
+   for(i = 0; i < quant; i++){
+      AVL1 = InsereArvoreAVL(AVL1, ord[i], &ok);
+   }
+
+   end = clock();
+   double tempo_insere_ORD_AVL = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", tempo_insere_ORD_AVL);
+   //printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_3);
+   
+   // SALVA OS DADOS DO TESTE
+   bench.tempo = tempo_insere_ORD_AVL;
+   strcpy(bench.arv, "AVL");
+   strcpy(bench.ord, "ORD");
+
+   listaInsere = insere_ord(listaInsere, bench);
+
+   //========================================================================================
+   // INSERE AVL NÃO ORDENADA
+   // Cria uma AVL com os dados não ordenados
+   //========================================================================================
+   int insere_NORD_AVL = 0;
+   begin = clock();
+
+   for(i = 0; i < quant; i++){
+      AVL2 = InsereArvoreAVL(AVL2, nonOrd[i], &ok);
+   }
+
+   end = clock();
+   double tempo_insere_NORD_AVL = (double)(end - begin) / CLOCKS_PER_SEC;
+
+   printf("\nTempo de Insercao: %lf", tempo_insere_NORD_AVL);
+   //printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_3);
+   
+   // SALVA OS DADOS DO TESTE
+   bench.tempo = tempo_insere_NORD_AVL;
+   strcpy(bench.arv, "AVL");
+   strcpy(bench.ord, "NORD");
+
+   listaInsere = insere_ord(listaInsere, bench);
+
 
    //========================================================================================
    // CENÁRIO 1: CONSULTA ORDENADA
@@ -101,7 +178,7 @@ void benchmark(int quant)
    end = clock();
    double time_ORD_ABP_1 = (double)(end - begin) / CLOCKS_PER_SEC;
 
-   printf("\nTempo de Insercao: %lf", time_ORD_ABP_1);
+   printf("\nTempo de Consulta: %lf", time_ORD_ABP_1);
    printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_1);
 
    // 1.1.b. Meio
@@ -111,7 +188,7 @@ void benchmark(int quant)
    end = clock();
    double time_ORD_ABP_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
-   printf("\nTempo de Insercao: %lf", time_ORD_ABP_2);
+   printf("\nTempo de Consulta: %lf", time_ORD_ABP_2);
    printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_2);
 
    // 1.1.c. Fim
@@ -121,7 +198,7 @@ void benchmark(int quant)
    end = clock();
    double time_ORD_ABP_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
-   printf("\nTempo de Insercao: %lf", time_ORD_ABP_3);
+   printf("\nTempo de Consulta: %lf", time_ORD_ABP_3);
    printf("\nNumero de Comparacoes: %d", comp_ORD_ABP_3);
 
    double time_ORD_ABP_MED = (time_ORD_ABP_1 + time_ORD_ABP_2 + time_ORD_ABP_3) / 3;
@@ -147,7 +224,7 @@ void benchmark(int quant)
    end = clock();
    double time_ORD_AVL_1 = (double)(end - begin) / CLOCKS_PER_SEC;
 
-   printf("\nTempo de Insercao: %lf", time_ORD_AVL_1);
+   printf("\nTempo de Consulta: %lf", time_ORD_AVL_1);
    printf("\nNumero de Comparacoes: %d", comp_ORD_AVL_1);
    
    // 1.2.b. Meio
@@ -157,7 +234,7 @@ void benchmark(int quant)
    end = clock();
    double time_ORD_AVL_2 = (double)(end - begin) / CLOCKS_PER_SEC;
 
-   printf("\nTempo de Insercao: %lf", time_ORD_AVL_2);
+   printf("\nTempo de Consulta: %lf", time_ORD_AVL_2);
    printf("\nNumero de Comparacoes: %d", comp_ORD_AVL_2);
 
    // 1.2.c. Fim
@@ -167,7 +244,7 @@ void benchmark(int quant)
    end = clock();
    double time_ORD_AVL_3 = (double)(end - begin) / CLOCKS_PER_SEC;
 
-   printf("\nTempo de Insercao: %lf", time_ORD_AVL_3);
+   printf("\nTempo de Consulta: %lf", time_ORD_AVL_3);
    printf("\nNumero de Comparacoes: %d", comp_ORD_AVL_3);
 
    double time_ORD_AVL_MED = (time_ORD_AVL_1 + time_ORD_AVL_2 + time_ORD_AVL_3) / 3.0;
@@ -211,7 +288,7 @@ void benchmark(int quant)
       comp_NORD_ABP[i] = consultaABP(ABP2, r);
       end = clock();
       time_NORD_ABP[i] = (double)(end - begin) / CLOCKS_PER_SEC;
-      printf("\nTempo de Insercao: %lf", time_NORD_ABP[i]);
+      printf("\nTempo de Consulta: %lf", time_NORD_ABP[i]);
       printf("\nNumero de Comparacoes: %d", comp_NORD_ABP[i]);
 
       time_NORD_ABP_sum = time_NORD_ABP[i] + time_NORD_ABP_sum;
@@ -250,7 +327,7 @@ void benchmark(int quant)
       comp_NORD_AVL[i] = consultaAVL(AVL2, r);
       end = clock();
       time_NORD_AVL[i] = (double)(end - begin) / CLOCKS_PER_SEC;
-      printf("\nTempo de Insercao: %lf", time_NORD_AVL[i]);
+      printf("\nTempo de Consulta: %lf", time_NORD_AVL[i]);
       printf("\nNumero de Comparacoes: %d", comp_NORD_AVL[i]);
 
       time_NORD_AVL_sum = time_NORD_AVL[i] + time_NORD_AVL_sum;
@@ -275,7 +352,14 @@ void benchmark(int quant)
    printf("\n\n------- BENCHMARKING -------\n\n");
    printf("Cenário: %d dados\n", quant);
 
-   printf("\nExibindo a lista...\n");
+   // printf("\n\n--------------------------------\n");
+   // printf("Resultados do Insere\n");
+   // printf("--------------------------------\n");
+   // imprime(listaInsere);
+
+   printf("\n\n--------------------------------\n");
+   printf("Resultados de Consulta\n");
+   printf("--------------------------------\n");
    imprime(listaTempos);
 
    //========================================================================================
